@@ -31,5 +31,4 @@ edit.publish('test1.xml')
 container.add(edit)
 
 // generates edition container contents
-console.log(container.xml)
 container.publish('container.xml')
