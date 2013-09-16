@@ -50,6 +50,27 @@ describe('edition-page', function () {
       }).should.throwError('No page title')
     })
 
+    describe('published property', function () {
+      it('should default to false', function () {
+        editionPage().object.published.should.equal(false)
+      })
+
+      it('should be true when published', function (done) {
+        var pageEntry = editionPage({ title: 'made up title' })
+          , writeStream = pageEntry.publish()
+
+        writeStream.on('finish', function () {
+          pageEntry.object.published.should.equal(true)
+          done()
+        })
+      })
+
+      it('should not be present in the XML', function () {
+        var etree = et.parse(editionPage().xml)
+        should.not.exist(etree.find('published'))
+      })
+    })
+
     it('should not error if no summary provided')
     it('should error if no HTML given')
 
