@@ -22,6 +22,7 @@ describe('edition', function () {
       , author: 'Dom Harrington'
       , cover: 'image.jpg'
       , contents: 'atom.xml'
+      , id: 'test-unique-id'
       })
 
     var etree = et.parse(edit.xml)
@@ -30,6 +31,7 @@ describe('edition', function () {
     etree.findtext('summary').should.equal('text summary')
     etree.findtext('author/name').should.equal('Dom Harrington')
     etree.find('link[@type="image/jpg"]').get('href').should.equal('image.jpg')
+    etree.findtext('id').should.equal('test-unique-id')
   })
 
   it('should not output wrong fields', function () {
@@ -68,6 +70,7 @@ describe('edition', function () {
     it('should have a published property')
 
     it('should error if no title provided')
+    it('should error if no ID provided')
     it('should not error if no summary provided')
     it('should error if no link to cover image provided')
     it('should warn if no contents given')
@@ -150,6 +153,4 @@ describe('edition', function () {
       should.exist(pageEntry.object.published)
     })
   })
-
-  it('should generate a unique ID')
 })

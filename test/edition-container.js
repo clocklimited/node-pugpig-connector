@@ -14,12 +14,14 @@ describe('edition-container', function () {
     var container = editionContainer(
       { title: 'test title'
       , author: 'Dom Harrington'
+      , id: 'test-unique-id'
       })
 
     var etree = et.parse(container.xml)
 
     etree.findtext('title').should.equal('test title')
     etree.findtext('author/name').should.equal('Dom Harrington')
+    etree.findtext('id').should.equal('test-unique-id')
   })
 
   it('should not output wrong fields', function () {
@@ -37,7 +39,6 @@ describe('edition-container', function () {
     should.exist(etree.find('./').get('xmlns:opds'))
   })
 
-  it('should generate a unique ID')
   it('should have a link to itself: <link rel=\'self\'>')
 
   describe('#publish()', function () {
@@ -46,6 +47,7 @@ describe('edition-container', function () {
     })
 
     it('should error if no title provided')
+    it('should error if no ID provided')
     it('should warn if no contents given')
     it('should not error if no summary provided')
 

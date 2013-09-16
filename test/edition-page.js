@@ -17,11 +17,13 @@ describe('edition-page', function () {
       , html: '<h1>Test HTML</h1>'
       , manifest: ''
       , category: 'Test category'
+      , id: 'test-unique-id'
       })
 
     var etree = et.parse(pageEntry.xml)
 
     etree.findtext('title').should.equal('test title')
+    etree.findtext('id').should.equal('test-unique-id')
 
     var categoryEl = etree.find('category')
     categoryEl.get('scheme').should.equal('http://schema.pugpig.com/section')
@@ -37,8 +39,6 @@ describe('edition-page', function () {
     should.not.exist(etree.find('wrong'))
   })
 
-  it('should generate a unique ID')
-
   describe('#publish()', function () {
     it('should have a publish function', function () {
       editionPage().publish.should.be.a('function')
@@ -49,6 +49,8 @@ describe('edition-page', function () {
         editionPage().publish()
       }).should.throwError('No page title')
     })
+
+    it('should error if no ID provided')
 
     describe('published property', function () {
       it('should default to false', function () {
