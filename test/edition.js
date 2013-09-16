@@ -4,10 +4,15 @@ var edition = require('../lib/edition')
   , should = require('should')
   , rimraf = require('rimraf')
   , fs = require('fs')
+  , async = require('async')
 
 describe('edition', function () {
   after(function (done) {
-    rimraf('atom.xml', done)
+    async.series(
+      [ rimraf.bind(null, 'atom.xml')
+      , rimraf.bind(null, 'big-title.html')
+      , rimraf.bind(null, 'big-title.manifest')
+      ], done)
   })
 
   it('should output Atom for attributes passed', function () {
@@ -38,7 +43,7 @@ describe('edition', function () {
 
   function addPages(edit) {
     for (var i = 0; i < 10; i += 1) {
-      edit.add(page())
+      edit.add({ object: {}})
     }
   }
 
@@ -122,6 +127,14 @@ describe('edition', function () {
       edit.pages.length.should.equal(0)
       addPages(edit)
       edit.pages.length.should.equal(10)
+    })
+
+    it('should call #publish() on the page if it is not yet published', function () {
+      var edit = edition()
+        , pageEntry = page({ title: 'big title' })
+
+      edit.add(pageEntry)
+      pageEntry.object.published.should.equal(true)
     })
   })
 
