@@ -22,8 +22,6 @@ var page = editionPage(
   , category: 'my great category'
   })
 
-page.publish()
-
 // add page to edition
 edit.add(page)
 
