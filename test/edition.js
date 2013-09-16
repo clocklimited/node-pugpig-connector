@@ -15,23 +15,29 @@ describe('edition', function () {
       ], done)
   })
 
-  it('should output Atom for attributes passed', function () {
-    var edit = edition(
+  var atomValues =
       { title: 'test title'
       , summary: 'text summary'
       , author: 'Dom Harrington'
       , cover: 'image.jpg'
       , contents: 'atom.xml'
       , id: 'test-unique-id'
-      })
+      }
 
-    var etree = et.parse(edit.xml)
+  function checkAtomValues(xml) {
+    var etree = et.parse(xml)
 
     etree.findtext('title').should.equal('test title')
     etree.findtext('summary').should.equal('text summary')
     etree.findtext('author/name').should.equal('Dom Harrington')
-    etree.find('link[@type="image/jpg"]').get('href').should.equal('image.jpg')
     etree.findtext('id').should.equal('test-unique-id')
+  }
+
+  it('should output Atom for attributes passed', function () {
+    var edit = edition(atomValues)
+
+    checkAtomValues(edit.xml)
+    et.parse(edit.xml).find('link[@type="image/jpg"]').get('href').should.equal('image.jpg')
   })
 
   it('should not output wrong fields', function () {
@@ -87,7 +93,7 @@ describe('edition', function () {
     })
 
     it('should output all pages to separate XML file', function (done) {
-      var edit = edition()
+      var edit = edition(atomValues)
         , path = 'atom.xml'
 
       addPages(edit)
@@ -102,6 +108,8 @@ describe('edition', function () {
 
           should.exist(etree.find('./').get('xmlns'))
           should.exist(etree.find('./').get('xmlns:app'))
+
+          checkAtomValues(file)
 
           done()
         })
