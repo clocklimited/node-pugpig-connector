@@ -64,6 +64,19 @@ describe('edition-container', function () {
         })
       })
     })
+
+    it('should add an updated date when called', function (done) {
+      var path = 'test.xml'
+        , container = editionContainer()
+        , writeStream = container.publish(path)
+
+      writeStream.on('finish', writeFinish)
+
+      function writeFinish() {
+        should.exist(container.object.updated)
+        done()
+      }
+    })
   })
 
   describe('#add()', function () {
