@@ -38,3 +38,5 @@ Icon?
 /.cake_task_cache
 
 /example/node_modules
+/example/
+!/example/example.js
