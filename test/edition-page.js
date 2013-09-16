@@ -55,12 +55,12 @@ describe('edition-page', function () {
         editionPage().object.published.should.equal(false)
       })
 
-      it('should be true when published', function (done) {
+      it('should exist when published', function (done) {
         var pageEntry = editionPage({ title: 'made up title' })
           , writeStream = pageEntry.publish()
 
         writeStream.on('finish', function () {
-          pageEntry.object.published.should.equal(true)
+          should.exist(pageEntry.object.published)
           done()
         })
       })
@@ -68,6 +68,16 @@ describe('edition-page', function () {
       it('should not be present in the XML', function () {
         var etree = et.parse(editionPage().xml)
         should.not.exist(etree.find('published'))
+      })
+    })
+
+    it('should have an updated property when published', function (done) {
+      var pageEntry = editionPage({ title: 'made up title' })
+        , writeStream = pageEntry.publish()
+
+      writeStream.on('finish', function () {
+        should.exist(pageEntry.object.updated)
+        done()
       })
     })
 
