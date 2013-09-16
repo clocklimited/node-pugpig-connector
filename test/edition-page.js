@@ -55,6 +55,8 @@ describe('edition-page', function () {
 
     it('should write a HTML file to a certain location', function (done) {
       var html = '<h1>Hello world</h1>'
+        , fileTitle = 'made-up-title'
+        , htmlTitle = fileTitle + '.html'
         , pageEntry = editionPage(
           { title: 'Made up title'
           , html: html
@@ -64,10 +66,28 @@ describe('edition-page', function () {
       writeStream.on('finish', writeFinish)
 
       function writeFinish() {
-        fs.readFile('made-up-title.html', 'UTF-8', function (err, file) {
+        fs.readFile(htmlTitle, 'UTF-8', function (err, file) {
           file.toString().should.equal(html)
+          checkLinks()
           done()
         })
+      }
+
+      function checkLinks() {
+        var etree = et.parse(pageEntry.xml)
+          , links = etree.findall('link')
+
+        links.length.should.equal(3)
+        links[0].get('rel').should.equal('alternate')
+        links[0].get('type').should.equal('text/html')
+        links[0].get('href').should.equal(htmlTitle)
+        links[1].get('rel').should.equal('bookmark')
+        links[1].get('type').should.equal('text/html')
+        // TODO this should include an absolute link to this resource
+        links[1].get('href').should.equal(htmlTitle)
+        links[2].get('rel').should.equal('related')
+        links[2].get('type').should.equal('text/cache-manifest')
+        links[2].get('href').should.equal(fileTitle + '.manifest')
       }
     })
 
