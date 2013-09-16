@@ -52,6 +52,19 @@ describe('edition', function () {
       edition().publish.should.be.a('function')
     })
 
+    it('should add an updated date when called', function (done) {
+      var path = 'atom.xml'
+        , edit = edition()
+        , writeStream = edit.publish(path)
+
+      writeStream.on('finish', writeFinish)
+
+      function writeFinish() {
+        should.exist(edit.object.updated)
+        done()
+      }
+    })
+
     it('should have a published property')
 
     it('should error if no title provided')
@@ -134,7 +147,7 @@ describe('edition', function () {
         , pageEntry = page({ title: 'big title' })
 
       edit.add(pageEntry)
-      pageEntry.object.published.should.equal(true)
+      should.exist(pageEntry.object.published)
     })
   })
 
