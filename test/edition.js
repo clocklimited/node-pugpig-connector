@@ -137,8 +137,6 @@ describe('edition', function () {
         done()
       }
     })
-
-    it('should remove <entry> from top XML')
   })
 
   describe('#add()', function () {

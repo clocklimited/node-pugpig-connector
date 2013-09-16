@@ -48,8 +48,7 @@ describe('edition-container', function () {
 
     it('should error if no title provided')
     it('should error if no ID provided')
-    it('should warn if no contents given')
-    it('should not error if no summary provided')
+    it('should error if no contents given')
 
     describe('pricing information', function () {
       it('should not error if no information given')
