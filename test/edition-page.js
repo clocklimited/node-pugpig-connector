@@ -44,12 +44,6 @@ describe('edition-page', function () {
       editionPage().publish.should.be.a('function')
     })
 
-    it('should error if no title provided', function () {
-      (function () {
-        editionPage().publish()
-      }).should.throwError('No page title')
-    })
-
     it('should error if no ID provided')
 
     describe('published property', function () {
