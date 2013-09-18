@@ -51,7 +51,7 @@ describe('edition', function () {
 
   function addPages(edit) {
     for (var i = 0; i < 10; i += 1) {
-      edit.add({ object: {}})
+      edit.pages.push({ object: {}})
     }
   }
 
@@ -139,24 +139,9 @@ describe('edition', function () {
     })
   })
 
-  describe('#add()', function () {
-    it('should have an add function', function () {
-      edition().add.should.be.a('function')
-    })
-
-    it('should add pages to entries array', function () {
-      var edit = edition()
-      edit.pages.length.should.equal(0)
-      addPages(edit)
-      edit.pages.length.should.equal(10)
-    })
-
-    it('should call #publish() on the page if it is not yet published', function () {
-      var edit = edition()
-        , pageEntry = page({ title: 'big title' })
-
-      edit.add(pageEntry)
-      should.exist(pageEntry.object.published)
+  describe('pages', function () {
+    it('should be an array', function () {
+      edition().pages.should.be.an.instanceOf(Array)
     })
   })
 })
