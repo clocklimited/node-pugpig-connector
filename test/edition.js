@@ -1,5 +1,4 @@
 var edition = require('../lib/edition')
-  , page = require('../lib/edition-page')
   , et = require('elementtree')
   , should = require('should')
   , rimraf = require('rimraf')
