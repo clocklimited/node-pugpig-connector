@@ -1,5 +1,5 @@
 {
-  "name": "node-pugpig-connector",
+  "name": "pugpig",
   "version": "0.0.0",
   "description": "",
   "main": "pugpig.js",
