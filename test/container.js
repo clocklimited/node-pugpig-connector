@@ -1,4 +1,4 @@
-var editionContainer = require('../lib/edition-container')
+var editionContainer = require('../lib/container')
   , edition = require('../lib/edition')
   , should = require('should')
   , et = require('elementtree')

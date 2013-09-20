@@ -12,9 +12,9 @@ var mocha = new Mocha()
 
 mocha.reporter('spec').ui('bdd')
 
-mocha.addFile(join(__dirname, 'edition-container.js'))
+mocha.addFile(join(__dirname, 'container.js'))
 mocha.addFile(join(__dirname, 'edition.js'))
-mocha.addFile(join(__dirname, 'edition-page.js'))
+mocha.addFile(join(__dirname, 'page.js'))
 
 var runner = mocha.run(function () {
   console.log('Finished', counts)

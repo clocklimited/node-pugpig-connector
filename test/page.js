@@ -1,4 +1,4 @@
-var editionPage = require('../lib/edition-page')
+var editionPage = require('../lib/page')
   , et = require('elementtree')
   , should = require('should')
   , fs = require('fs')
