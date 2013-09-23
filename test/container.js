@@ -1,14 +1,17 @@
 var editionContainer = require('../lib/container')
   , edition = require('../lib/edition')
+  , page = require('../lib/page')
   , should = require('should')
   , et = require('elementtree')
   , rimraf = require('rimraf')
   , fs = require('fs')
+  , mkdirp = require('mkdirp')
+  , testPath = 'container-test-data/'
 
 describe('edition-container', function () {
-  after(function (done) {
-    rimraf('test.xml', done)
-  })
+  before(mkdirp.bind(null, testPath))
+
+  after(rimraf.bind(null, testPath))
 
   it('should output OPDS for attributes passed', function () {
     var container = editionContainer(
@@ -56,7 +59,7 @@ describe('edition-container', function () {
     })
 
     it('should write an XML file to a certain location', function (done) {
-      var path = 'test.xml'
+      var path = testPath + 'test.xml'
       var writeStream = editionContainer().publish(path)
       writeStream.on('finish', function () {
         fs.exists(path, function (exists) {
@@ -67,7 +70,7 @@ describe('edition-container', function () {
     })
 
     it('should add an updated date when called', function (done) {
-      var path = 'test.xml'
+      var path = testPath + 'test.xml'
         , container = editionContainer()
         , writeStream = container.publish(path)
 
@@ -75,6 +78,28 @@ describe('edition-container', function () {
 
       function writeFinish() {
         should.exist(container.object.updated)
+        done()
+      }
+    })
+
+    it('should call publish on editions and pages within the container', function (done) {
+      var path = testPath + 'test.xml'
+        , container = editionContainer()
+        , edit = edition({ id: 'edition-key' })
+        , page1 = page({ title: 'page title' })
+
+      edit.object.published.should.equal(false)
+      page1.object.published.should.equal(false)
+
+      edit.pages.push(page1)
+      container.add(edit)
+
+      var writeStream = container.publish(path)
+      writeStream.on('finish', writeFinish)
+
+      function writeFinish() {
+        edit.object.published.should.equal(true)
+        should.exist(page1.object.published)
         done()
       }
     })

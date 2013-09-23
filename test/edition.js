@@ -4,16 +4,13 @@ var edition = require('../lib/edition')
   , should = require('should')
   , rimraf = require('rimraf')
   , fs = require('fs')
-  , async = require('async')
+  , mkdirp = require('mkdirp')
+  , testPath = 'edition-test-data/'
 
 describe('edition', function () {
-  after(function (done) {
-    async.series(
-      [ rimraf.bind(null, 'atom.xml')
-      , rimraf.bind(null, 'big-title.html')
-      , rimraf.bind(null, 'big-title.manifest')
-      ], done)
-  })
+  before(mkdirp.bind(null, testPath))
+
+  after(rimraf.bind(null, testPath))
 
   var atomValues =
       { title: 'test title'
@@ -51,7 +48,7 @@ describe('edition', function () {
 
   function addPages(edit) {
     for (var i = 0; i < 10; i += 1) {
-      edit.pages.push({ object: {}})
+      edit.pages.push(page({ title: 'page title ' + i }))
     }
   }
 
@@ -61,7 +58,7 @@ describe('edition', function () {
     })
 
     it('should add an updated date when called', function (done) {
-      var path = 'atom.xml'
+      var path = testPath + 'atom.xml'
         , edit = edition()
         , writeStream = edit.publish(path)
 
@@ -73,17 +70,66 @@ describe('edition', function () {
       }
     })
 
-    it('should have a published property')
+    it('should call #publish() on the page if it is not yet published', function (done) {
+      var edit = edition()
+        , page1 = page({ title: 'big title' })
 
-    it('should error if no title provided')
-    it('should error if no ID provided')
-    it('should not error if no summary provided')
-    it('should error if no link to cover image provided')
-    it('should warn if no contents given')
+      edit.pages.push(page1)
+
+      var writeStream = edit.publish(testPath + 'atom.xml')
+
+      writeStream.on('finish', function () {
+        should.exist(page1.object.published)
+        done()
+      })
+    })
+
+    it('should not output page#publish() to XML', function (done) {
+      var edit = edition()
+        , page1 = page({ title: 'big title' })
+
+      edit.pages.push(page1)
+
+      var writeStream = edit.publish(testPath + 'atom.xml')
+
+      writeStream.on('finish', onEditionWrite)
+
+      function onEditionWrite() {
+        fs.readFile(testPath + 'atom.xml', 'utf8', function (err, file) {
+          var etree = et.parse(file)
+          should.not.exist(etree.find('entry/publish'))
+          done()
+        })
+      }
+    })
+
+    describe('published property', function () {
+      it('should default to false', function () {
+        edition().object.published.should.equal(false)
+      })
+
+      it('should be true when published', function (done) {
+        var edit = edition()
+          , writeStream = edit.publish(testPath + 'atom.xml')
+
+        writeStream.on('finish', writeFinish)
+
+        function writeFinish() {
+          edit.object.published.should.equal(true)
+          done()
+        }
+      })
+
+      it('should not be present in the XML', function () {
+        var etree = et.parse(edition().xml)
+        should.not.exist(etree.find('published'))
+      })
+    })
 
     it('should write an XML file to a certain location', function (done) {
-      var path = 'atom.xml'
-      var writeStream = edition().publish(path)
+      var path = testPath + 'atom.xml'
+        , writeStream = edition().publish(path)
+
       writeStream.on('finish', function () {
         fs.exists(path, function (exists) {
           exists.should.equal(true)
@@ -94,7 +140,7 @@ describe('edition', function () {
 
     it('should output all pages to separate XML file', function (done) {
       var edit = edition(atomValues)
-        , path = 'atom.xml'
+        , path = testPath + 'atom.xml'
 
       addPages(edit)
       var writeStream = edit.publish(path)
@@ -118,7 +164,7 @@ describe('edition', function () {
 
     it('should link to contents page from XML', function (done) {
       var edit = edition()
-        , path = 'atom.xml'
+        , path = testPath + 'atom.xml'
 
       addPages(edit)
       var writeStream = edit.publish(path)
@@ -142,6 +188,20 @@ describe('edition', function () {
   describe('pages', function () {
     it('should be an array', function () {
       edition().pages.should.be.an.instanceOf(Array)
+    })
+  })
+
+  describe('#add()', function () {
+    it('should have an add function', function () {
+      edition().add.should.be.a('function')
+    })
+
+    it('should add pages to array', function () {
+      var edit = edition()
+      for (var i = 1; i < 10; i += 1) {
+        edit.add(page())
+        edit.pages.length.should.equal(i)
+      }
     })
   })
 })
