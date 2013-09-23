@@ -80,10 +80,12 @@ describe('edition-page', function () {
       var html = '<h1>Hello world</h1>'
         , key = '789'
         , htmlTitle = '-' + key + '.html'
+        , url = 'http://example.com/'
         , pageEntry = editionPage(
           { title: 'Made up title'
           , html: html
           , key: key
+          , url: url
           })
         , path = join(__dirname, testPath)
         , writeStream = pageEntry.publish(path)
@@ -91,7 +93,7 @@ describe('edition-page', function () {
       writeStream.on('finish', writeFinish)
 
       function writeFinish() {
-        fs.readFile(join(path, '-789.html'), 'UTF-8', function (err, file) {
+        fs.readFile(join(path, '-789.html'), 'utf8', function (err, file) {
           file.toString().should.equal(html)
           checkLinks()
           done()
@@ -109,7 +111,7 @@ describe('edition-page', function () {
         links[1].get('rel').should.equal('bookmark')
         links[1].get('type').should.equal('text/html')
         // TODO this should include an absolute link to this resource
-        links[1].get('href').should.equal(htmlTitle)
+        links[1].get('href').should.equal(url + htmlTitle)
         links[2].get('rel').should.equal('related')
         links[2].get('type').should.equal('text/cache-manifest')
         links[2].get('href').should.equal('-' + key + '.manifest')

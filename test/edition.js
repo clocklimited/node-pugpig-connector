@@ -62,7 +62,7 @@ describe('edition', function () {
 
   function addPages(edit) {
     for (var i = 0; i < 10; i += 1) {
-      edit.pages.push(page({ title: 'page title ' + i }))
+      edit.add(page({ title: 'page title ' + i }))
     }
   }
 
@@ -88,7 +88,7 @@ describe('edition', function () {
       var edit = edition()
         , page1 = page({ title: 'big title' })
 
-      edit.pages.push(page1)
+      edit.add(page1)
 
       var writeStream = edit.publish(testPath + 'atom.xml')
 
@@ -102,7 +102,7 @@ describe('edition', function () {
       var edit = edition()
         , page1 = page({ title: 'big title' })
 
-      edit.pages.push(page1)
+      edit.add(page1)
 
       var writeStream = edit.publish(testPath + 'atom.xml')
 
@@ -164,7 +164,7 @@ describe('edition', function () {
       writeStream.on('finish', writeFinish)
 
       function writeFinish() {
-        fs.readFile(path, 'UTF-8', function (err, file) {
+        fs.readFile(path, 'utf8', function (err, file) {
           var etree = et.parse(file)
 
           etree.findall('entry').length.should.equal(10)
