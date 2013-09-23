@@ -18,7 +18,7 @@ describe('edition', function () {
       , author: 'Dom Harrington'
       , cover: 'image.jpg'
       , contents: 'atom.xml'
-      , id: 'test-unique-id'
+      , key: 'test-unique-key'
       }
 
   function checkAtomValues(xml) {
@@ -27,7 +27,7 @@ describe('edition', function () {
     etree.findtext('title').should.equal('test title')
     etree.findtext('summary').should.equal('text summary')
     etree.findtext('author/name').should.equal('Dom Harrington')
-    etree.findtext('id').should.equal('test-unique-id')
+    etree.findtext('key').should.equal('test-unique-key')
   }
 
   it('should output Atom for attributes passed', function () {

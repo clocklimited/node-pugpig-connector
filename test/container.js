@@ -17,14 +17,14 @@ describe('edition-container', function () {
     var container = editionContainer(
       { title: 'test title'
       , author: 'Dom Harrington'
-      , id: 'test-unique-id'
+      , key: 'test-unique-key'
       })
 
     var etree = et.parse(container.xml)
 
     etree.findtext('title').should.equal('test title')
     etree.findtext('author/name').should.equal('Dom Harrington')
-    etree.findtext('id').should.equal('test-unique-id')
+    etree.findtext('key').should.equal('test-unique-key')
   })
 
   it('should not output wrong fields', function () {

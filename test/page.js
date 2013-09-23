@@ -17,13 +17,13 @@ describe('edition-page', function () {
       , html: '<h1>Test HTML</h1>'
       , manifest: ''
       , category: 'Test category'
-      , id: 'test-unique-id'
+      , key: 'test-unique-key'
       })
 
     var etree = et.parse(pageEntry.xml)
 
     etree.findtext('title').should.equal('test title')
-    etree.findtext('id').should.equal('test-unique-id')
+    etree.findtext('key').should.equal('test-unique-key')
 
     var categoryEl = etree.find('category')
     categoryEl.get('scheme').should.equal('http://schema.pugpig.com/section')
