@@ -44,7 +44,21 @@ describe('edition', function () {
     should.not.exist(etree.find('wrong'))
   })
 
-  it('should have a link to itself: <link rel=\'self\'>')
+  it('should have a link to itself: <link rel=\'self\'>', function (done) {
+    var path = testPath + 'test.xml'
+      , url = 'http://example.com'
+      , writeStream = edition({ url: url }).publish(path)
+
+    writeStream.on('finish', function () {
+      var file = fs.readFileSync(path).toString()
+        , etree = et.parse(file)
+        , linkEl = etree.find('link')
+
+      linkEl.get('href').should.equal(url + '/test.xml')
+      linkEl.get('rel').should.equal('self')
+      done()
+    })
+  })
 
   function addPages(edit) {
     for (var i = 0; i < 10; i += 1) {

@@ -42,7 +42,21 @@ describe('edition-container', function () {
     should.exist(etree.find('./').get('xmlns:opds'))
   })
 
-  it('should have a link to itself: <link rel=\'self\'>')
+  it('should have a link to itself: <link rel=\'self\'>', function (done) {
+    var path = testPath + 'test.xml'
+      , url = 'http://example.com'
+      , writeStream = editionContainer({ url: url }).publish(path)
+
+    writeStream.on('finish', function () {
+      var file = fs.readFileSync(path).toString()
+        , etree = et.parse(file)
+        , linkEl = etree.find('link')
+
+      linkEl.get('href').should.equal(url + '/test.xml')
+      linkEl.get('rel').should.equal('self')
+      done()
+    })
+  })
 
   describe('#publish()', function () {
     it('should have a publish function', function () {
@@ -56,7 +70,8 @@ describe('edition-container', function () {
 
     it('should write an XML file to a certain location', function (done) {
       var path = testPath + 'test.xml'
-      var writeStream = editionContainer().publish(path)
+        , writeStream = editionContainer().publish(path)
+
       writeStream.on('finish', function () {
         fs.exists(path, function (exists) {
           exists.should.equal(true)
