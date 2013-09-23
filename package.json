@@ -7,6 +7,7 @@
     "test": "test"
   },
   "scripts": {
+    "pretest": "./node_modules/.bin/jshint .",
     "test": "node ./test/tests.js"
   },
   "author": "",
@@ -15,7 +16,8 @@
     "mocha": "~1.12.1",
     "should": "~1.2.2",
     "rimraf": "~2.2.2",
-    "mkdirp": "~0.3.5"
+    "mkdirp": "~0.3.5",
+    "jshint": "~2.1.11"
   },
   "dependencies": {
     "elementtree": "~0.1.5",
