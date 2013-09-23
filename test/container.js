@@ -85,7 +85,7 @@ describe('edition-container', function () {
     it('should call publish on editions and pages within the container', function (done) {
       var path = testPath + 'test.xml'
         , container = editionContainer()
-        , edit = edition({ id: 'edition-key' })
+        , edit = edition({ key: 'edition-key' })
         , page1 = page({ title: 'page title' })
 
       edit.object.published.should.equal(false)
