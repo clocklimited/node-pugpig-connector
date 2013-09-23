@@ -45,8 +45,6 @@ describe('edition-page', function () {
       editionPage().publish.should.be.a('function')
     })
 
-    it('should error if no ID provided')
-
     describe('published property', function () {
       it('should default to false', function () {
         editionPage().object.published.should.equal(false)
@@ -77,9 +75,6 @@ describe('edition-page', function () {
         done()
       })
     })
-
-    it('should not error if no summary provided')
-    it('should error if no HTML given')
 
     it('should write a HTML file to a certain location', function (done) {
       var html = '<h1>Hello world</h1>'

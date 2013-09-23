@@ -49,10 +49,6 @@ describe('edition-container', function () {
       editionContainer().publish.should.be.a('function')
     })
 
-    it('should error if no title provided')
-    it('should error if no ID provided')
-    it('should error if no contents given')
-
     describe('pricing information', function () {
       it('should not error if no information given')
       it('should default to free')
