@@ -86,12 +86,17 @@ describe('edition-container', function () {
       var path = testPath + 'test.xml'
         , container = editionContainer()
         , edit = edition({ key: 'edition-key' })
-        , page1 = page({ title: 'page title' })
+        , page1key = 'page-title-id'
+        , page2key = 'page2-title-id'
+        , page1 = page({ title: 'page title', key: page1key })
+        , page2 = page({ title: 'page title 2', key: page2key })
 
       edit.object.published.should.equal(false)
       page1.object.published.should.equal(false)
+      page2.object.published.should.equal(false)
 
-      edit.pages.push(page1)
+      edit.add(page1)
+      edit.add(page2)
       container.add(edit)
 
       var writeStream = container.publish(path)
@@ -100,7 +105,33 @@ describe('edition-container', function () {
       function writeFinish() {
         edit.object.published.should.equal(true)
         should.exist(page1.object.published)
+        should.exist(page2.object.published)
+        fs.existsSync(testPath + 'edition-key-atom.xml-' + page1key + '.html').should.equal(true)
+        fs.existsSync(testPath + 'edition-key-atom.xml-' + page2key + '.html').should.equal(true)
+        fs.existsSync(testPath + 'edition-key-atom.xml-' + page1key + '.manifest').should.equal(true)
+        fs.existsSync(testPath + 'edition-key-atom.xml-' + page2key + '.manifest').should.equal(true)
         done()
+      }
+    })
+
+    it('should not output edition properties to XML', function (done) {
+      var container = editionContainer()
+        , edit = edition({ key: 'key' })
+
+      container.add(edit)
+      var writeStream = container.publish(testPath + 'atom.xml')
+
+      writeStream.on('finish', onContainerWrite)
+
+      function onContainerWrite() {
+        fs.readFile(testPath + 'atom.xml', 'utf8', function (err, file) {
+          var etree = et.parse(file)
+          should.not.exist(etree.find('entry/object'))
+          should.not.exist(etree.find('entry/add'))
+          should.not.exist(etree.find('entry/publish'))
+          should.not.exist(etree.find('entry/xml'))
+          done()
+        })
       }
     })
   })
