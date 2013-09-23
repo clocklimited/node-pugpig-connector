@@ -84,7 +84,7 @@ describe('edition', function () {
       })
     })
 
-    it('should not output page#publish() to XML', function (done) {
+    it('should not output page properties to XML', function (done) {
       var edit = edition()
         , page1 = page({ title: 'big title' })
 
@@ -98,6 +98,9 @@ describe('edition', function () {
         fs.readFile(testPath + 'atom.xml', 'utf8', function (err, file) {
           var etree = et.parse(file)
           should.not.exist(etree.find('entry/publish'))
+          should.not.exist(etree.find('entry/object'))
+          should.not.exist(etree.find('entry/html'))
+          should.not.exist(etree.find('entry/xml'))
           done()
         })
       }

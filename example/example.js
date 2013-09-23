@@ -1,13 +1,13 @@
 var pugpig = require('../pugpig')
-  , editionContainer = pugpig.editionContainer
+  , container = pugpig.container
   , edition = pugpig.edition
-  , editionPage = pugpig.editionPage
+  , page = pugpig.page
 
-var container = editionContainer(
+var container1 = container(
     { title: 'test title'
     , image: 'image.jpg'
     , author: 'Dom Harrington'
-    , id: 'tag:example.com,2013-09:books/first-book'
+    , key: 'tag:example.com,2013-09:books/first-book'
     })
 
 var edit = edition(
@@ -15,30 +15,30 @@ var edit = edition(
     , summary: 'text summary'
     , author: 'Dom Harrington'
     , cover: 'image.jpg'
-    , id: 'tag:example.com,2013-09:first-book'
+    , key: 'tag:example.com,2013-09:first-book'
     })
 
-var page1 = editionPage(
+var page1 = page(
     { title: 'page 1'
     , html: '<h1>This is the first page</h1>'
     , category: 'introduction'
-    , id: 'tag:example.com,2013-09:first-book:0'
+    , key: 'page1-id'
     })
-  , page2 = editionPage(
+  , page2 = page(
     { title: 'page 2'
     , html: '<h1>This is the second page</h1>'
     , category: 'introduction'
-    , id: 'tag:example.com,2013-09:first-book:1'
+    , key: 'page2-id'
     })
 
 // add pages to edition
 edit.add(page1)
 edit.add(page2)
 
-edit.publish('edition.xml')
-
 // add edition to container
-container.add(edit)
+container1.add(edit)
 
 // generates edition container contents
-container.publish('container.xml')
+container1.publish('container.xml').on('finish', function () {
+  console.log('Container published!')
+})
