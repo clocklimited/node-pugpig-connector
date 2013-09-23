@@ -12,6 +12,7 @@ var mocha = new Mocha()
 
 mocha.reporter('spec').ui('bdd')
 
+mocha.addFile(join(__dirname, 'pugpig.js'))
 mocha.addFile(join(__dirname, 'container.js'))
 mocha.addFile(join(__dirname, 'edition.js'))
 mocha.addFile(join(__dirname, 'page.js'))
