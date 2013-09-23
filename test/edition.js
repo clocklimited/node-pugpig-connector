@@ -27,7 +27,7 @@ describe('edition', function () {
     etree.findtext('title').should.equal('test title')
     etree.findtext('summary').should.equal('text summary')
     etree.findtext('author/name').should.equal('Dom Harrington')
-    etree.findtext('key').should.equal('test-unique-key')
+    etree.findtext('id').should.equal('test-unique-key')
   }
 
   it('should output Atom for attributes passed', function () {

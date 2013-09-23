@@ -24,7 +24,7 @@ describe('edition-page', function () {
     var etree = et.parse(pageEntry.xml)
 
     etree.findtext('title').should.equal('test title')
-    etree.findtext('key').should.equal('test-unique-key')
+    etree.findtext('id').should.equal('test-unique-key')
 
     var categoryEl = etree.find('category')
     categoryEl.get('scheme').should.equal('http://schema.pugpig.com/section')

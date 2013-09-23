@@ -24,7 +24,7 @@ describe('edition-container', function () {
 
     etree.findtext('title').should.equal('test title')
     etree.findtext('author/name').should.equal('Dom Harrington')
-    etree.findtext('key').should.equal('test-unique-key')
+    etree.findtext('id').should.equal('test-unique-key')
   })
 
   it('should not output wrong fields', function () {
