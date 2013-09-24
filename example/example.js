@@ -7,7 +7,8 @@ var container1 = container(
     { title: 'test title'
     , image: 'image.jpg'
     , author: 'Dom Harrington'
-    , key: 'tag:example.com,2013-09:books/first-book'
+    , key: 'container-id'
+    , url: 'http://example.com/'
     })
 
 var edit = edition(
@@ -15,7 +16,8 @@ var edit = edition(
     , summary: 'text summary'
     , author: 'Dom Harrington'
     , cover: 'image.jpg'
-    , key: 'tag:example.com,2013-09:first-book'
+    , key: 'edition-id'
+    , url: 'http://example.com/'
     })
 
 var page1 = page(
@@ -23,12 +25,14 @@ var page1 = page(
     , html: '<h1>This is the first page</h1>'
     , category: 'introduction'
     , key: 'page1-id'
+    , url: 'http://example.com/'
     })
   , page2 = page(
     { title: 'page 2'
     , html: '<h1>This is the second page</h1>'
     , category: 'introduction'
     , key: 'page2-id'
+    , url: 'http://example.com/'
     })
 
 // add pages to edition
