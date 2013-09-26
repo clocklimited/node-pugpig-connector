@@ -193,6 +193,7 @@ describe('edition-container', function () {
         should.not.exist(etree.find('entry/pages/html'))
         should.not.exist(etree.find('entry/pages/publish'))
         should.not.exist(etree.find('entry/pages/xml'))
+        should.not.exist(etree.find('entry/published'))
         done()
       }
     })
