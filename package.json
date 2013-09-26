@@ -1,10 +1,13 @@
 {
   "name": "pugpig",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "",
   "main": "pugpig.js",
   "directories": {
     "test": "test"
+  },
+  "publishConfig": {
+    "registry": "http://npm.clockte.ch"
   },
   "scripts": {
     "pretest": "./node_modules/.bin/jshint .",
