@@ -54,6 +54,7 @@ describe('edition-container', function () {
 
       linkEl.get('href').should.equal(url + '/test.xml')
       linkEl.get('rel').should.equal('self')
+      linkEl.get('type').should.equal('application/atom+xml;profile=opds-catalog;kind=acquisition')
       done()
     })
   })
