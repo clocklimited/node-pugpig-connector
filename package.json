@@ -6,6 +6,9 @@
   "directories": {
     "test": "test"
   },
+  "publishConfig": {
+    "registry": "http://npm.clockte.ch"
+  },
   "scripts": {
     "pretest": "./node_modules/.bin/jshint .",
     "test": "node ./test/tests.js"
