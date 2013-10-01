@@ -79,21 +79,21 @@ describe('edition-page', function () {
     it('should write a HTML file to a certain location', function (done) {
       var html = '<h1>Hello world</h1>'
         , key = '789'
-        , htmlTitle = key + '.html'
-        , url = 'http://example.com/test'
+        , htmlTitle = '-' + key + '.html'
+        , url = 'http://example.com/'
         , pageEntry = editionPage(
           { title: 'Made up title'
           , html: html
           , key: key
           , url: url
           })
-        , path = join(__dirname, testPath, key)
+        , path = join(__dirname, testPath)
         , writeStream = pageEntry.publish(path)
 
       writeStream.on('finish', writeFinish)
 
       function writeFinish() {
-        fs.readFile(path + '.html', 'utf8', function (err, file) {
+        fs.readFile(join(path, '-789.html'), 'utf8', function (err, file) {
           file.toString().should.equal(html)
           checkLinks()
           done()
@@ -107,31 +107,29 @@ describe('edition-page', function () {
         links.length.should.equal(3)
         links[0].get('rel').should.equal('alternate')
         links[0].get('type').should.equal('text/html')
-        links[0].get('href').should.equal('/test/' + htmlTitle)
+        links[0].get('href').should.equal(htmlTitle)
         links[1].get('rel').should.equal('bookmark')
         links[1].get('type').should.equal('text/html')
-        links[1].get('href').should.equal(url + '/' + htmlTitle)
+        links[1].get('href').should.equal(url + htmlTitle)
         links[2].get('rel').should.equal('related')
         links[2].get('type').should.equal('text/cache-manifest')
-        links[2].get('href').should.equal('/test/' + key + '.manifest')
+        links[2].get('href').should.equal('-' + key + '.manifest')
       }
     })
 
     it('should write a manifest file to a certain location', function (done) {
       var html = '<img src="hello.jpg" />'
-        , key = '111'
         , pageEntry = editionPage(
           { title: 'Made up title'
           , html: html
-          , key: key
           })
-        , path = join(__dirname, testPath, key)
+        , path = join(__dirname, testPath)
         , writeStream = pageEntry.publish(path)
 
       writeStream.on('finish', writeFinish)
 
       function writeFinish() {
-        fs.readFile(path + '.manifest', function (err, file) {
+        fs.readFile(join(path, '-789.manifest'), function (err, file) {
           file.toString().should.equal('CACHE MANIFEST')
           // file.toString().should.equal('CACHE MANIFEST\nhello.jpg')
           done()
