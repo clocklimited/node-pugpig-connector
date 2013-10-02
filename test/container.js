@@ -7,6 +7,8 @@ var editionContainer = require('../lib/container')
   , fs = require('fs')
   , mkdirp = require('mkdirp')
   , testPath = 'container-test-data/'
+  , _ = require('lodash')
+  , join = require('path').join
 
 describe('edition-container', function () {
   before(mkdirp.bind(null, testPath))
@@ -123,6 +125,27 @@ describe('edition-container', function () {
         fs.existsSync(testPath + 'edition-key-atom.xml-' + page1key + '.manifest').should.equal(true)
         fs.existsSync(testPath + 'edition-key-atom.xml-' + page2key + '.manifest').should.equal(true)
         done()
+      }
+    })
+
+    it('should output relative URL in entry/link node hrefs', function (done) {
+      var path = testPath + 'test.xml'
+        , baseFields = { url: 'http://example.com/folder' }
+        , container = editionContainer(baseFields)
+        , edit = edition(_.extend(baseFields, { key: 'edition-key-123' }))
+
+      container.add(edit)
+
+      var writeStream = container.publish(path)
+      writeStream.on('finish', writeFinish)
+
+      function writeFinish() {
+        fs.readFile(join(testPath, 'test.xml'), 'utf8', function (err, file) {
+          var etree = et.parse(file)
+          etree.find('entry/link').get('href').should.equal('/folder/' + edit.obj.id + '-atom.xml')
+
+          done()
+        })
       }
     })
 
