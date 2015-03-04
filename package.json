@@ -23,8 +23,9 @@
     "jshint": "~2.1.11"
   },
   "dependencies": {
-    "elementtree": "~0.1.5",
     "data2xml": "~0.9.0",
-    "lodash": "~2.0.0"
+    "elementtree": "~0.1.5",
+    "lodash": "~2.0.0",
+    "slugg": "^0.1.2"
   }
 }
